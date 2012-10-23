@@ -1,0 +1,88 @@
+Apache Druid (incubating)
+Copyright 2019 The Apache Software Foundation
+
+This product includes software developed at
+The Apache Software Foundation (http://www.apache.org/).
+
+
+############ SOURCE/JAVA-CORE ############
+
+================= Apache Hive =================
+Apache Hive
+Copyright 2008-2018 The Apache Software Foundation
+
+
+
+
+================= Apache Lucene =================
+Apache Lucene
+Copyright 2001-2019 The Apache Software Foundation
+
+
+
+
+================= Apache Calcite =================
+Apache Calcite
+Copyright 2012-2019 The Apache Software Foundation
+
+This product is based on source code originally developed
+by DynamoBI Corporation, LucidEra Inc., SQLstream Inc. and others
+under the auspices of the Eigenbase Foundation
+and released as the LucidDB project.
+
+
+
+
+================= Apache Hadoop =================
+Apache Hadoop
+Copyright 2009-2017 The Apache Software Foundation
+
+
+
+
+================= Apache Kafka =================
+Apache Kafka
+Copyright 2019 The Apache Software Foundation
+
+
+
+
+================= Apache Flink =================
+Apache Flink
+Copyright 2014-2019 The Apache Software Foundation
+
+
+
+
+================= Metamarkets java-util =================
+java-util
+Copyright 2011-2017 Metamarkets Group Inc.
+
+
+
+
+================= Metamarkets bytebuffer-collections =================
+bytebuffer-collections
+Copyright 2011-2015 Metamarkets Group Inc.
+
+
+
+
+================= Metamarkets extendedset =================
+extendedset
+Copyright 2012 Metamarkets Group Inc.
+
+-------------------------------------------------------------------------------
+
+This library contains a modified version of Alessandro Colantonio's CONCISE
+(COmpressed 'N' Composable Integer SEt) library, extending the functionality of
+ConciseSet to use IntBuffers.
+
+
+
+
+================= JetS3t =================
+   =========================================================================
+   ==  NOTICE file corresponding to section 4(d) of the Apache License,   ==
+   ==  Version 2.0, in this case for the distribution of jets3t.          ==
+   =========================================================================
