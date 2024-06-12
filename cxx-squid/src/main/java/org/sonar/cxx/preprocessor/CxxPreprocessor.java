@@ -34,7 +34,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.StringJoiner;
-import java.util.stream.Collectors;
 
 import javax.annotation.Nullable;
 
@@ -145,16 +144,8 @@ public class CxxPreprocessor extends Preprocessor {
 
     public Macro(String name, @Nullable List<Token> params, @Nullable List<Token> body, boolean variadic) {
       this.name = name;
-      if (params == null) {
-        this.params = null;
-      } else {
-        this.params = params.stream().collect(Collectors.toList());
-      }
-      if (body == null) {
-        this.body = null;
-      } else {
-        this.body = body.stream().collect(Collectors.toList());
-      }
+      this.params = params;
+      this.body = body;
       this.isVariadic = variadic;
     }
 
