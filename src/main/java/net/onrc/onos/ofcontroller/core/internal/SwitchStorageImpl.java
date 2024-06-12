@@ -39,7 +39,7 @@ public class SwitchStorageImpl implements ISwitchStorage {
 	 * It will close the DB connection.
 	 */
 	@Override
-	protected void finalize() {
+	public void finalize() {
 		close();
 	}
 

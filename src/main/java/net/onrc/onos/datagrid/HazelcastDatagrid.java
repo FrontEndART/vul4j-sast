@@ -78,7 +78,7 @@ public class HazelcastDatagrid implements IFloodlightModule, IDatagridService {
     private IMap<String, byte[]> mapTopology = null;
     private MapTopologyListener mapTopologyListener = null;
     private String mapTopologyListenerId = null;
-
+    
     // State related to the ARP map
     protected static final String arpMapName = "arpMap";
     private IMap<ArpMessage, byte[]> arpMap = null;
@@ -98,9 +98,8 @@ public class HazelcastDatagrid implements IFloodlightModule, IDatagridService {
 	 *
 	 * @param event the notification event for the entry.
 	 */
-	@Override
 	public void entryAdded(EntryEvent<Long, byte[]> event) {
-	    byte[] valueBytes = event.getValue();
+	    byte[] valueBytes = (byte[])event.getValue();
 
 	    //
 	    // Decode the value and deliver the notification
@@ -117,9 +116,8 @@ public class HazelcastDatagrid implements IFloodlightModule, IDatagridService {
 	 *
 	 * @param event the notification event for the entry.
 	 */
-	@Override
 	public void entryRemoved(EntryEvent<Long, byte[]> event) {
-	    byte[] valueBytes = event.getValue();
+	    byte[] valueBytes = (byte[])event.getValue();
 
 	    //
 	    // Decode the value and deliver the notification
@@ -136,9 +134,8 @@ public class HazelcastDatagrid implements IFloodlightModule, IDatagridService {
 	 *
 	 * @param event the notification event for the entry.
 	 */
-	@Override
 	public void entryUpdated(EntryEvent<Long, byte[]> event) {
-	    byte[] valueBytes = event.getValue();
+	    byte[] valueBytes = (byte[])event.getValue();
 
 	    //
 	    // Decode the value and deliver the notification
@@ -155,7 +152,6 @@ public class HazelcastDatagrid implements IFloodlightModule, IDatagridService {
 	 *
 	 * @param event the notification event for the entry.
 	 */
-	@Override
 	public void entryEvicted(EntryEvent<Long, byte[]> event) {
 	    // NOTE: We don't use eviction for this map
 	}
@@ -174,9 +170,8 @@ public class HazelcastDatagrid implements IFloodlightModule, IDatagridService {
 	 *
 	 * @param event the notification event for the entry.
 	 */
-	@Override
 	public void entryAdded(EntryEvent<Long, byte[]> event) {
-	    byte[] valueBytes = event.getValue();
+	    byte[] valueBytes = (byte[])event.getValue();
 
 	    //
 	    // Decode the value and deliver the notification
@@ -193,9 +188,8 @@ public class HazelcastDatagrid implements IFloodlightModule, IDatagridService {
 	 *
 	 * @param event the notification event for the entry.
 	 */
-	@Override
 	public void entryRemoved(EntryEvent<Long, byte[]> event) {
-	    byte[] valueBytes = event.getValue();
+	    byte[] valueBytes = (byte[])event.getValue();
 
 	    //
 	    // Decode the value and deliver the notification
@@ -212,9 +206,8 @@ public class HazelcastDatagrid implements IFloodlightModule, IDatagridService {
 	 *
 	 * @param event the notification event for the entry.
 	 */
-	@Override
 	public void entryUpdated(EntryEvent<Long, byte[]> event) {
-	    byte[] valueBytes = event.getValue();
+	    byte[] valueBytes = (byte[])event.getValue();
 
 	    //
 	    // Decode the value and deliver the notification
@@ -231,7 +224,6 @@ public class HazelcastDatagrid implements IFloodlightModule, IDatagridService {
 	 *
 	 * @param event the notification event for the entry.
 	 */
-	@Override
 	public void entryEvicted(EntryEvent<Long, byte[]> event) {
 	    // NOTE: We don't use eviction for this map
 	}
@@ -250,9 +242,8 @@ public class HazelcastDatagrid implements IFloodlightModule, IDatagridService {
 	 *
 	 * @param event the notification event for the entry.
 	 */
-	@Override
 	public void entryAdded(EntryEvent<String, byte[]> event) {
-	    byte[] valueBytes = event.getValue();
+	    byte[] valueBytes = (byte[])event.getValue();
 
 	    //
 	    // Decode the value and deliver the notification
@@ -270,9 +261,8 @@ public class HazelcastDatagrid implements IFloodlightModule, IDatagridService {
 	 *
 	 * @param event the notification event for the entry.
 	 */
-	@Override
 	public void entryRemoved(EntryEvent<String, byte[]> event) {
-	    byte[] valueBytes = event.getValue();
+	    byte[] valueBytes = (byte[])event.getValue();
 
 	    //
 	    // Decode the value and deliver the notification
@@ -290,9 +280,8 @@ public class HazelcastDatagrid implements IFloodlightModule, IDatagridService {
 	 *
 	 * @param event the notification event for the entry.
 	 */
-	@Override
 	public void entryUpdated(EntryEvent<String, byte[]> event) {
-	    byte[] valueBytes = event.getValue();
+	    byte[] valueBytes = (byte[])event.getValue();
 
 	    //
 	    // Decode the value and deliver the notification
@@ -310,12 +299,11 @@ public class HazelcastDatagrid implements IFloodlightModule, IDatagridService {
 	 *
 	 * @param event the notification event for the entry.
 	 */
-	@Override
 	public void entryEvicted(EntryEvent<String, byte[]> event) {
 	    // NOTE: We don't use eviction for this map
 	}
     }
-
+    
     /**
      * Class for receiving notifications for ARP requests.
      *
@@ -329,12 +317,11 @@ public class HazelcastDatagrid implements IFloodlightModule, IDatagridService {
 		 *
 		 * @param event the notification event for the entry.
 		 */
-		@Override
 		public void entryAdded(EntryEvent<ArpMessage, byte[]> event) {
 		    for (IArpEventHandler arpEventHandler : arpEventHandlers) {
 		    	arpEventHandler.arpRequestNotification(event.getKey());
 		    }
-
+		    
 		    //
 		    // Decode the value and deliver the notification
 		    //
@@ -347,33 +334,30 @@ public class HazelcastDatagrid implements IFloodlightModule, IDatagridService {
 		    flowEventHandlerService.notificationRecvTopologyElementAdded(topologyElement);
 		    */
 		}
-
+	
 		/**
 		 * Receive a notification that an entry is removed.
 		 *
 		 * @param event the notification event for the entry.
 		 */
-		@Override
 		public void entryRemoved(EntryEvent<ArpMessage, byte[]> event) {
 			// Not used
 		}
-
+	
 		/**
 		 * Receive a notification that an entry is updated.
 		 *
 		 * @param event the notification event for the entry.
 		 */
-		@Override
 		public void entryUpdated(EntryEvent<ArpMessage, byte[]> event) {
 			// Not used
 		}
-
+	
 		/**
 		 * Receive a notification that an entry is evicted.
 		 *
 		 * @param event the notification event for the entry.
 		 */
-		@Override
 		public void entryEvicted(EntryEvent<ArpMessage, byte[]> event) {
 		    // Not used
 		}
@@ -390,7 +374,7 @@ public class HazelcastDatagrid implements IFloodlightModule, IDatagridService {
 	System.setProperty("hazelcast.socket.send.buffer.size", "32");
 	*/
 	// System.setProperty("hazelcast.heartbeat.interval.seconds", "100");
-
+	
 	// Init from configuration file
 	try {
 	    hazelcastConfig = new FileSystemXmlConfig(configFilename);
@@ -411,8 +395,7 @@ public class HazelcastDatagrid implements IFloodlightModule, IDatagridService {
     /**
      * Shutdown the Hazelcast Datagrid operation.
      */
-    @Override
-    protected void finalize() {
+    public void finalize() {
 	close();
     }
 
@@ -430,7 +413,7 @@ public class HazelcastDatagrid implements IFloodlightModule, IDatagridService {
      */
     @Override
     public Collection<Class<? extends IFloodlightService>> getModuleServices() {
-        Collection<Class<? extends IFloodlightService>> l =
+        Collection<Class<? extends IFloodlightService>> l = 
             new ArrayList<Class<? extends IFloodlightService>>();
         l.add(IDatagridService.class);
         return l;
@@ -442,10 +425,10 @@ public class HazelcastDatagrid implements IFloodlightModule, IDatagridService {
      * @return the collection of implemented services.
      */
     @Override
-    public Map<Class<? extends IFloodlightService>, IFloodlightService>
+    public Map<Class<? extends IFloodlightService>, IFloodlightService> 
 			       getServiceImpls() {
         Map<Class<? extends IFloodlightService>,
-	    IFloodlightService> m =
+	    IFloodlightService> m = 
             new HashMap<Class<? extends IFloodlightService>,
                 IFloodlightService>();
         m.put(IDatagridService.class, this);
@@ -458,7 +441,7 @@ public class HazelcastDatagrid implements IFloodlightModule, IDatagridService {
      * @return the collection of modules this module depends on.
      */
     @Override
-    public Collection<Class<? extends IFloodlightService>>
+    public Collection<Class<? extends IFloodlightService>> 
                                                     getModuleDependencies() {
 	Collection<Class<? extends IFloodlightService>> l =
 	    new ArrayList<Class<? extends IFloodlightService>>();
@@ -494,7 +477,7 @@ public class HazelcastDatagrid implements IFloodlightModule, IDatagridService {
 	hazelcastInstance = Hazelcast.newHazelcastInstance(hazelcastConfig);
 
 	restApi.addRestletRoutable(new DatagridWebRoutable());
-
+	
 	arpMap = hazelcastInstance.getMap(arpMapName);
 	arpMap.addEntryListener(new ArpMapListener(), true);
     }
@@ -555,19 +538,19 @@ public class HazelcastDatagrid implements IFloodlightModule, IDatagridService {
 
 	this.flowEventHandlerService = null;
     }
-
+    
     @Override
     public void registerArpEventHandler(IArpEventHandler arpEventHandler) {
     	if (arpEventHandler != null) {
     		arpEventHandlers.add(arpEventHandler);
     	}
     }
-
+    
     @Override
     public void deregisterArpEventHandler(IArpEventHandler arpEventHandler) {
     	arpEventHandlers.remove(arpEventHandler);
     }
-
+    
     /**
      * Get all Flows that are currently in the datagrid.
      *
@@ -900,7 +883,7 @@ public class HazelcastDatagrid implements IFloodlightModule, IDatagridService {
 	    mapTopology.removeAsync(key);
 	}
     }
-
+    
     @Override
     public void sendArpRequest(ArpMessage arpMessage) {
     	//log.debug("ARP bytes: {}", HexString.toHexString(arpRequest));

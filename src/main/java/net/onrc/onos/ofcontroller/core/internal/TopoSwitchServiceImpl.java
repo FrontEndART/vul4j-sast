@@ -9,7 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class TopoSwitchServiceImpl implements ITopoSwitchService {
-
+	
 	private GraphDBOperation op;
 	protected final static Logger log = LoggerFactory.getLogger(TopoSwitchServiceImpl.class);
 
@@ -20,17 +20,16 @@ public class TopoSwitchServiceImpl implements ITopoSwitchService {
 	public TopoSwitchServiceImpl() {
 		this("");
 	}
-
-	@Override
-	protected void finalize() {
+	
+	public void finalize() {
 		close();
 	}
-
+	
 	@Override
 	public void close() {
 		op.close();
 	}
-
+	
 	@Override
 	public Iterable<ISwitchObject> getActiveSwitches() {
 		// TODO Auto-generated method stub
@@ -66,5 +65,5 @@ public class TopoSwitchServiceImpl implements ITopoSwitchService {
 	public IPortObject getPortOnSwitch(String dpid, short port_num) {
 		// TODO Auto-generated method stub
 		return null;
-	}
+	}	
 }

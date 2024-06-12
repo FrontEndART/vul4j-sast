@@ -82,8 +82,7 @@ public class TopologyManager implements IFloodlightModule,
     /**
      * Shutdown the Topology Manager operation.
      */
-    @Override
-    protected void finalize() {
+    public void finalize() {
 	close();
     }
 
@@ -101,7 +100,7 @@ public class TopologyManager implements IFloodlightModule,
      */
     @Override
     public Collection<Class<? extends IFloodlightService>> getModuleServices() {
-        Collection<Class<? extends IFloodlightService>> l =
+        Collection<Class<? extends IFloodlightService>> l = 
             new ArrayList<Class<? extends IFloodlightService>>();
         l.add(ITopologyNetService.class);
         return l;
@@ -113,10 +112,10 @@ public class TopologyManager implements IFloodlightModule,
      * @return the collection of implemented services.
      */
     @Override
-    public Map<Class<? extends IFloodlightService>, IFloodlightService>
+    public Map<Class<? extends IFloodlightService>, IFloodlightService> 
 			       getServiceImpls() {
         Map<Class<? extends IFloodlightService>,
-	    IFloodlightService> m =
+	    IFloodlightService> m = 
             new HashMap<Class<? extends IFloodlightService>,
 	    IFloodlightService>();
         m.put(ITopologyNetService.class, this);
@@ -129,7 +128,7 @@ public class TopologyManager implements IFloodlightModule,
      * @return the collection of modules this module depends on.
      */
     @Override
-    public Collection<Class<? extends IFloodlightService>>
+    public Collection<Class<? extends IFloodlightService>> 
                                                     getModuleDependencies() {
 	Collection<Class<? extends IFloodlightService>> l =
 	    new ArrayList<Class<? extends IFloodlightService>>();
@@ -192,7 +191,6 @@ public class TopologyManager implements IFloodlightModule,
      *
      * @return the allocated topology handler.
      */
-    @Override
     public Topology newDatabaseTopology() {
 	Topology topology = new Topology();
 	topology.readFromDatabase(dbHandler);
@@ -209,7 +207,6 @@ public class TopologyManager implements IFloodlightModule,
      *
      * @param topology the topology to release.
      */
-    @Override
     public void dropTopology(Topology topology) {
 	topology = null;
     }
@@ -306,7 +303,6 @@ public class TopologyManager implements IFloodlightModule,
      * @return the data path with the computed shortest path if
      * found, otherwise null.
      */
-    @Override
     public DataPath getTopologyShortestPath(Topology topology,
 					    SwitchPort src, SwitchPort dest) {
 	return ShortestPath.getTopologyShortestPath(topology, src, dest);
