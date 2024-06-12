@@ -1,10 +1,6 @@
 package org.dcache.services.billing.html;
 
-import java.util.List;
-
 import org.dcache.services.billing.plots.BillingHistory;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import diskCacheV111.util.HTMLWriter;
 import dmg.cells.nucleus.CellNucleus;
@@ -12,6 +8,8 @@ import dmg.util.Args;
 import dmg.util.HttpException;
 import dmg.util.HttpRequest;
 import dmg.util.HttpResponseEngine;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Servlet stand-in {@link org.dcache.services.httpd.HttpServiceCell}. <br><br>
@@ -89,9 +87,8 @@ HttpResponseEngine {
         contents.println("<th>Monthly</th>");
         contents.println("<th>Yearly</th>");
         contents.println("</tr>");
-        List<String> type =  BillingHistory.getTYPE();
-        for (int t = 0; t < type.size(); t++) {
-            printRow(contents, BillingHistory.getTITLE(t), type.get(t));
+        for (int t = 0; t < BillingHistory.TYPE.length; t++) {
+            printRow(contents, BillingHistory.TITLE[t], BillingHistory.TYPE[t]);
         }
         contents.println("</table>");
         contents.addFooter(this.getClass().getName());
@@ -109,7 +106,7 @@ HttpResponseEngine {
         contents.println("<tr>");
         contents.println("<td align='right'><i>" + title + "</i></td>");
         String prefix =  subDir + fileSep + type;
-        for (String tag : BillingHistory.getEXT()) {
+        for (String tag : BillingHistory.EXT) {
             String file = prefix + tag + imgExt;
             contents.println("<td><a href='" + file + "'> <img src='" + file
                             + "' width=" + THUMBNAIL_W + " height="

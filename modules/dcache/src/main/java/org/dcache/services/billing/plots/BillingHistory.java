@@ -5,11 +5,9 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.URL;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
@@ -31,8 +29,6 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
 
-import com.google.common.collect.ImmutableList;
-
 import dmg.util.Args;
 
 /**
@@ -50,7 +46,7 @@ public class BillingHistory implements Runnable {
      * Makes command-line arguments available to Spring bean configuration.
      */
     private class BillingHistoryApplicationContext extends
-                    ClassPathXmlApplicationContext {
+    ClassPathXmlApplicationContext {
 
         private BillingHistoryApplicationContext() {
             super(args.getOption(CONTEXT_LOCATION));
@@ -106,11 +102,9 @@ public class BillingHistory implements Runnable {
         }
     }
 
-    protected static final List<String> TYPE = ImmutableList.of("bytes_rd",
-                    "bytes_wr", "transfers_rd", "transfers_wr", "time", "hits",
-                    "cost");
-    protected static final List<String> EXT = ImmutableList.of("_dy", "_wk",
-                    "_mo", "_yr");
+    public static final String[] TYPE = { "bytes_rd", "bytes_wr",
+        "transfers_rd", "transfers_wr", "time", "hits", "cost" };
+    public static final String[] EXT = { "_dy", "_wk", "_mo", "_yr" };
 
     protected static final String DEFAULT_SLEEP = "30";
     protected static final String DEFAULT_PROPERTIES = "org/dcache/services/billing/plot/plot.properties";
@@ -127,29 +121,14 @@ public class BillingHistory implements Runnable {
     protected static final String EXPORT_EXT_OPT = "exportExt";
     protected static final String TIMEOUT_OPT = "plotsTimeout";
 
-    protected static List<String> TITLE;
-
-    public static List<String> getTYPE() {
-        return TYPE;
-    }
-
-    public static List<String> getEXT() {
-        return EXT;
-    }
-
-    public static String getTITLE(int i) {
-        if (TITLE == null) {
-            return null;
-        }
-        return TITLE.get(i);
-    }
+    public static String[] TITLE;
 
     protected final Logger logger = LoggerFactory.getLogger(this.getClass());
     protected final TimeFrame[] timeFrame;
     protected final Properties properties;
     protected final Args args;
 
-    protected List<String> timeDescription;
+    protected String[] TIME_DESC;
     protected String plotDir;
     protected String subDir;
     protected String imgExt;
@@ -187,12 +166,8 @@ public class BillingHistory implements Runnable {
         }
 
         if (plotDirF.exists()) {
-            if (!plotDirF.isDirectory()) {
-                if (!plotDirF.delete()) {
-                    logger.error("failed to delete {}; quitting ...", plotDirF);
-                    return;
-                }
-            }
+            if (!plotDirF.isDirectory())
+                plotDirF.delete();
         }
 
         setRunning(true);
@@ -200,9 +175,7 @@ public class BillingHistory implements Runnable {
         while (isRunning()) {
             try {
                 if (!plotDirF.exists()) {
-                    if (!plotDirF.mkdirs()) {
-                        throw new IOException("could not create " + plotDirF);
-                    }
+                    plotDirF.mkdirs();
                 }
 
                 logger.debug("generating time frames ...");
@@ -211,31 +184,25 @@ public class BillingHistory implements Runnable {
                 logger.debug("generating plots ...");
                 for (int t = 0; t < timeFrame.length; t++) {
                     Date d = timeFrame[t].getLow();
-                    generateReadWritePlot(TYPE.get(0) + EXT.get(t),
-                                    TITLE.get(0) + " (" + timeDescription.get(t)
-                                                    + d + ")", timeFrame[t],
+                    generateReadWritePlot(TYPE[0] + EXT[t], TITLE[0] + " ("
+                                    + TIME_DESC[t] + d + ")", timeFrame[t],
                                     false, true);
-                    generateReadWritePlot(TYPE.get(1) + EXT.get(t),
-                                    TITLE.get(1) + " (" + timeDescription.get(t)
-                                                    + d + ")", timeFrame[t],
+                    generateReadWritePlot(TYPE[1] + EXT[t], TITLE[1] + " ("
+                                    + TIME_DESC[t] + d + ")", timeFrame[t],
                                     true, true);
-                    generateReadWritePlot(TYPE.get(2) + EXT.get(t),
-                                    TITLE.get(2) + " (" + timeDescription.get(t)
-                                                    + d + ")", timeFrame[t],
+                    generateReadWritePlot(TYPE[2] + EXT[t], TITLE[2] + " ("
+                                    + TIME_DESC[t] + d + ")", timeFrame[t],
                                     false, false);
-                    generateReadWritePlot(TYPE.get(3) + EXT.get(t),
-                                    TITLE.get(3) + " (" + timeDescription.get(t)
-                                                    + d + ")", timeFrame[t],
+                    generateReadWritePlot(TYPE[3] + EXT[t], TITLE[3] + " ("
+                                    + TIME_DESC[t] + d + ")", timeFrame[t],
                                     true, false);
-                    generateConnectionTimePlot(TYPE.get(4) + EXT.get(t),
-                                    TITLE.get(4) + " (" + timeDescription.get(t)
-                                                    + d + ")", timeFrame[t]);
-                    generateHitsPlot(TYPE.get(5) + EXT.get(t), TITLE.get(5)
-                                    + " (" + timeDescription.get(t) + d + ")",
+                    generateConnectionTimePlot(TYPE[4] + EXT[t], TITLE[4]
+                                    + " (" + TIME_DESC[t] + d + ")", 
                                     timeFrame[t]);
-                    generateCostPlot(TYPE.get(6) + EXT.get(t), TITLE.get(6)
-                                    + " (" + timeDescription.get(t) + d + ")",
-                                    timeFrame[t]);
+                    generateHitsPlot(TYPE[5] + EXT[t], TITLE[5] + " ("
+                                    + TIME_DESC[t] + d + ")", timeFrame[t]);
+                    generateCostPlot(TYPE[6] + EXT[t], TITLE[6] + " ("
+                                    + TIME_DESC[t] + d + ")", timeFrame[t]);
                 }
             } catch (Throwable t) {
                 logger.error("error generating billing history plots; quitting ...",
@@ -258,11 +225,13 @@ public class BillingHistory implements Runnable {
      */
     private void initialize() throws Throwable {
         logger.debug("initializing ...");
-        ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+        ClassLoader classLoader = Thread.currentThread()
+                        .getContextClassLoader();
         initializeProperties(classLoader);
         synchronizeProperties();
         initializeAccess(classLoader);
-        TimeFramePlotFactory plotFactory = TimeFramePlotFactory.getInstance(access);
+        TimeFramePlotFactory plotFactory = TimeFramePlotFactory
+                        .getInstance(access);
         String impl = properties.getProperty(ITimeFramePlot.FACTORY_TYPE);
         factory = plotFactory.create(impl, properties);
     }
@@ -289,36 +258,31 @@ public class BillingHistory implements Runnable {
                                 "Cannot run BillingHistory thread for properties file: "
                                                 + file);
             }
-            InputStream stream = new FileInputStream(file);
-            try {
-                properties.load(stream);
-            } finally {
-                stream.close();
-            }
+            properties.load(new FileInputStream(file));
         } else {
             URL resource = classLoader.getResource(DEFAULT_PROPERTIES);
             if (resource == null) {
-                throw new FileNotFoundException("Cannot run BillingHistory"
-                                + "; cannot find resource "
-                                + DEFAULT_PROPERTIES);
+                throw new FileNotFoundException(
+                    "Cannot run BillingHistory thread for properties resource: "
+                                    + resource);
             }
             properties.load(resource.openStream());
         }
 
-        TITLE = ImmutableList.of(
-                        properties.getProperty(ITimeFramePlot.TITLE_BYTES_RD),
-                        properties.getProperty(ITimeFramePlot.TITLE_BYTES_WR),
-                        properties.getProperty(ITimeFramePlot.TITLE_TRANSF_RD),
-                        properties.getProperty(ITimeFramePlot.TITLE_TRANSF_WR),
-                        properties.getProperty(ITimeFramePlot.TITLE_CONN_TM),
-                        properties.getProperty(ITimeFramePlot.TITLE_CACHE_HITS),
-                        properties.getProperty(ITimeFramePlot.TITLE_POOL_COST));
+        TITLE = new String[7];
+        TITLE[0] = properties.getProperty(ITimeFramePlot.TITLE_BYTES_RD);
+        TITLE[1] = properties.getProperty(ITimeFramePlot.TITLE_BYTES_WR);
+        TITLE[2] = properties.getProperty(ITimeFramePlot.TITLE_TRANSF_RD);
+        TITLE[3] = properties.getProperty(ITimeFramePlot.TITLE_TRANSF_WR);
+        TITLE[4] = properties.getProperty(ITimeFramePlot.TITLE_CONN_TM);
+        TITLE[5] = properties.getProperty(ITimeFramePlot.TITLE_CACHE_HITS);
+        TITLE[6] = properties.getProperty(ITimeFramePlot.TITLE_POOL_COST);
 
-        timeDescription = ImmutableList.of(
-                        properties.getProperty(ITimeFramePlot.DESC_DAILY),
-                        properties.getProperty(ITimeFramePlot.DESC_WEEKLY),
-                        properties.getProperty(ITimeFramePlot.DESC_MONTHLY),
-                        properties.getProperty(ITimeFramePlot.DESC_YEARLY));
+        TIME_DESC = new String[4];
+        TIME_DESC[0] = properties.getProperty(ITimeFramePlot.DESC_DAILY);
+        TIME_DESC[1] = properties.getProperty(ITimeFramePlot.DESC_WEEKLY);
+        TIME_DESC[2] = properties.getProperty(ITimeFramePlot.DESC_MONTHLY);
+        TIME_DESC[3] = properties.getProperty(ITimeFramePlot.DESC_YEARLY);
     }
 
     /**
@@ -458,7 +422,8 @@ public class BillingHistory implements Runnable {
         try {
             ITimeFramePlot plot = factory.createPlot(fileName,
                             new String[] { title });
-            ITimeFrameHistogram[] histogram = factory.createDcConnectTimeHistograms(timeFrame);
+            ITimeFrameHistogram[] histogram = factory
+                            .createDcConnectTimeHistograms(timeFrame);
             PlotGridPosition pos = new PlotGridPosition(0, 0);
             for (ITimeFrameHistogram h : histogram) {
                 plot.addHistogram(pos, h);
@@ -483,7 +448,8 @@ public class BillingHistory implements Runnable {
         try {
             ITimeFramePlot plot = factory.createPlot(fileName,
                             new String[] { title });
-            ITimeFrameHistogram[] histogram = factory.createHitHistograms(timeFrame);
+            ITimeFrameHistogram[] histogram = factory
+                            .createHitHistograms(timeFrame);
             PlotGridPosition pos = new PlotGridPosition(0, 0);
             for (ITimeFrameHistogram h : histogram) {
                 plot.addHistogram(pos, h);
@@ -530,7 +496,7 @@ public class BillingHistory implements Runnable {
      */
     private ITimeFrameHistogram[] createReadWriteHistograms(
                     TimeFrame timeFrame, boolean write, boolean size)
-                    throws Throwable {
+                                throws Throwable {
         if (size) {
             return new ITimeFrameHistogram[] {
                             factory.createDcBytesHistogram(timeFrame, write),
@@ -556,7 +522,8 @@ public class BillingHistory implements Runnable {
         this.running = running;
     }
 
-    public void close() {
+    public void close() 
+    {
         access.close();
     }
 

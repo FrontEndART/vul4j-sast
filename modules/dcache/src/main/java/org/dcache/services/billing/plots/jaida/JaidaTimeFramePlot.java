@@ -10,7 +10,6 @@ import hep.aida.ref.plotter.PlotterUtilities;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
 
@@ -48,11 +47,9 @@ public final class JaidaTimeFramePlot extends AbstractTimeFramePlot {
         this.name = plotName;
         factory = af.createPlotterFactory();
         plotter = factory.create(plotName);
-        if (titles == null) {
+        this.titles = titles;
+        if (this.titles == null)
             this.titles = new String[0];
-        } else {
-            this.titles = Arrays.copyOf(titles, titles.length);
-        }
     }
 
     /*

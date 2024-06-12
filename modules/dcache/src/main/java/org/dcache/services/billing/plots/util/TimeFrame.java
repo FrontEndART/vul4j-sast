@@ -179,14 +179,14 @@ public class TimeFrame {
      * @return the low
      */
     public Date getLow() {
-        return new Date(low.getTime());
+        return low;
     }
 
     /**
      * @return the high
      */
     public Date getHigh() {
-        return new Date(high.getTime());
+        return high;
     }
 
     /**

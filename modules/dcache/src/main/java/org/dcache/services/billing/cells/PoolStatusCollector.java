@@ -4,14 +4,15 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.charset.Charset;
-
-import org.dcache.cells.CellStub;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.util.Date;
 
 import com.google.common.io.Files;
 
 import diskCacheV111.poolManager.PoolManagerCellInfo;
+import org.dcache.cells.CellStub;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import diskCacheV111.util.CacheException;
 import dmg.cells.nucleus.CellPath;
 
@@ -66,14 +67,10 @@ public final class PoolStatusCollector extends Thread
             }
         } catch (CacheException t) {
             _log.warn("Exception in CollectPools status : {}", t.toString());
-            if (!_report.delete()) {
-                _log.warn("Could not delete report: {}", _report);
-            }
+            _report.delete();
         } catch (InterruptedException t) {
             _log.warn("Exception in CollectPools status : {}", t.toString());
-            if (!_report.delete()) {
-                _log.warn("Could not delete report: {}", _report);
-            }
+            _report.delete();
         } finally {
             pw.close();
         }
