@@ -80,18 +80,18 @@ public class UserGroup extends AbstractEntity implements Serializable {
     }
 
     public Set<User> getUsers() {
-        return new HashSet<>(users);
+        return users;
     }
 
     public void setUsers(Set<User> users) {
-        this.users = new HashSet<>(users);
+        this.users = users;
     }
 
     public Set<KeyCategory> getCategories() {
-        return new HashSet<>(categories);
+        return categories;
     }
 
     public void setCategories(Set<KeyCategory> categories) {
-        this.categories = new HashSet<>(categories);
+        this.categories = categories;
     }
 }
